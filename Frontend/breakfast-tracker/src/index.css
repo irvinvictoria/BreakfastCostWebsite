@@ -149,3 +149,15 @@ div.addUserArea button{
   font-weight: bolder;
   margin: 10px auto;
 }
+
+.innerName {
+  text-align: center;
+  font-weight: bolder;
+}
+.employeeName {
+  flex: 1;
+  vertical-align: center;
+  margin: 10px;
+
+  
+}

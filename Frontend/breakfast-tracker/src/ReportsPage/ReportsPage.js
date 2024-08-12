@@ -1,22 +1,32 @@
-import React from 'react'
+import React, { useRef } from 'react'
 
 function ReportsPage() {
+  const inputDateFrom = useRef();
+  const inputDateTo = useRef();
+
+  function getReport() {
+    const dateFrom = inputDateFrom.current.value;
+    const dateTo = inputDateTo.current.value;
+    console.log(dateFrom + dateTo)
+    
+  }
+
+
   return (
     <div className='reportMainArea'>
         <h1>Reports page</h1>
         <div className='selectDatesArea'>
             <div className='dateFromArea'>
                 <h2 for="dateFrom">Date From</h2>
-                 <input name='dateFrom' id='dateFrom' type='date'></input>
+                 <input ref={inputDateFrom} name='dateFrom' id='dateFrom' type='date'></input>
             </div>
            <div className='dateToArea'>
                 <h2 for="dateTo">Date To</h2>
-                <input id='dateTo' type='date'></input>
+                <input ref={inputDateTo} id='dateTo' type='date'></input>
            </div>
-            <button id='createReportButton'>Create Report</button>
+            <button onClick={getReport} id='createReportButton'>Create Report</button>
         </div>
     </div>
-    
   );
 }
 

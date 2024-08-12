@@ -17,14 +17,15 @@ function AddUserPage() {
     const eeid = Number(formData.get('Eeid'));
     const firstname = formData.get('FirstName');
     const lastname = formData.get('LastName');
-    if(eeid == ""){
+    if(eeid == "" || firstname == "" || lastname == ""){
       alert("Please make sure all information is filled out.")
     }
     else{
+      // Calls Backend if they entered 
       const emp = {'Eeid': eeid, "FirstName": firstname, "LastName": lastname};
       axios.post('http://localhost:3001/AddEmployee', emp)
       .then(res => {
-        // 
+        
         alert("User was successfully added!");
         inputEeid.current.value = '';
         inputFirst.current.value = '';
