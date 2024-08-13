@@ -68,7 +68,7 @@ div.menu a:hover  {
 }
 
 .transactionArea {
-  width: 50%;
+  width: 55%;
   margin: auto;
   /* text-align: center; */
   /* display: inline-block; */
@@ -160,4 +160,21 @@ div.addUserArea button{
   margin: 10px;
 
   
+}
+.purchaseTable {
+  display: inline;
+  text-align: center;
+  
+  margin: auto;
+  border-collapse: collapse;
+}
+.purchaseTable tr th {
+  padding: 5px;
+} 
+.purchaseTable tr td {
+  padding: 3px;
+  font-size: 11px;
+}
+#tableButton{
+  font-weight: bolder;
 }

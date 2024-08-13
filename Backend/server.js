@@ -27,7 +27,25 @@ app.get('/getEmpAndTransactions', (req, res) => {
 
 // Gets the report from the selected dates
 app.get('/getReport', (req, res) => {
+    let dates = req.dates;
+    console.log(dates);
+    // var sql = 'SELECT * FROM purchase ';
+});
 
+// Deletes selected purchase
+app.delete('/deletePurchase/:id', (req, res) => {
+    const purchaseId = req.params.id * 1;
+    console.log(purchaseId);
+    var sql ='DELETE FROM purchase WHERE purchase_id ='+ purchaseId +';';
+    db.query(sql, (err,rows) => {
+        if(!err){
+            res.status(204).send({msg: 'Purchase deleted'});
+        }
+        else{
+            console.log(rows);
+            res.status(404);
+        }
+    })
 });
 
 // Inserts an employee
@@ -38,11 +56,24 @@ app.post('/addEmployee', (req,res) => {
     
     db.query(sql, [emp.Eeid, emp.FirstName, emp.LastName], (err, rows, fields) => {
         if(!err)
-            res.status(200).send({msg: 'Created User', rows});
+            res.status(201).send({msg: 'Created User', rows});
         else
             console.log(err);
     })
 });
+
+app.post('/addPurchase', (req,res) => {
+    let purchase = req.body;
+    var sql = "SET @Eeid = ?;SET @DayPurchase = ?;SET @PurchaseAmount = ?; \
+    CALL AddPurchase(@Eeid,@DayPurchase,@PurchaseAmount)";
+    db.query(sql, [purchase.Eeid, purchase.DayPurchase, purchase.PurchaseAmount], (err,rows,fields) => {
+        if(!err){
+            res.status(201).send({msg: 'Purchase added', rows});
+        }
+        else
+            console.log(err);
+    })
+})
 
 app.listen(port, () => {
     console.log(`API served at http://localhost:${port}`)

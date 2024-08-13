@@ -23,9 +23,8 @@ function AddUserPage() {
     else{
       // Calls Backend if they entered 
       const emp = {'Eeid': eeid, "FirstName": firstname, "LastName": lastname};
-      axios.post('http://localhost:3001/AddEmployee', emp)
+      axios.post('http://192.168.1.25:3001/AddEmployee', emp)
       .then(res => {
-        
         alert("User was successfully added!");
         inputEeid.current.value = '';
         inputFirst.current.value = '';

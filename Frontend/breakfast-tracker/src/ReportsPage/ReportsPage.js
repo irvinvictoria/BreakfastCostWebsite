@@ -1,4 +1,5 @@
 import React, { useRef } from 'react'
+import axios from 'axios';
 
 function ReportsPage() {
   const inputDateFrom = useRef();
@@ -8,7 +9,16 @@ function ReportsPage() {
     const dateFrom = inputDateFrom.current.value;
     const dateTo = inputDateTo.current.value;
     console.log(dateFrom + dateTo)
-    
+    const dates = {'dateFrom':dateFrom, 'dateTo':dateTo};
+    axios.get('http://192.168.1.25:3001/getReport', dates)
+    .then(res => {
+
+    })
+    .catch(err =>{
+      console.log(err);
+      alert("Could not create report")
+    })
+
   }
 
 
