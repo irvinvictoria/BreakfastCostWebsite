@@ -14,7 +14,6 @@ app.use(bodyparser.json());
 app.get('/getEmpAndTransactions', (req, res) => {
     let emp = req.query;
     var sql = 'SELECT * FROM purchase WHERE purchase.employee_id = ' + emp.Eeid + ' AND purchase.day_of_purchase = "'+ emp.day_of_purchase +'";' + 'SELECT * FROM employee WHERE employee_id = ' + emp.Eeid +';';
-    //var sql = 'SELECT * FROM employee WHERE employee_id = ' + emp.Eeid + '; SELECT * FROM employees.purchase WHERE purchase.employee_id = ' + emp.Eeid + ' AND purchase.day_of_purchase = '+ emp.Date +';';
     db.query(sql, (err, rows, fields) => {
         if(!err){
             console.log(rows[0]);
@@ -36,33 +35,27 @@ app.get('/getReport', (req, res) => {
     AND (Date(purchase.day_of_purchase) BETWEEN "'+ dates.dateFrom +'" AND "'+ dates.dateTo +'" );'
     db.query(sql, (err,rows) => {
        if(!err){
-
-            console.log(rows);
             let sums = {};
             let employees = {};
-            console.log(rows[0].employee_id);
+            // Gets the total spent per employee and names of employees 
             for(let i = 0; i<rows.length; i++){
-                console.log("for loop")
                 if(rows[i].employee_id in sums){
                     sums[rows[i].employee_id] += rows[i].purchase_amount *1;
-                    console.log(sums);
                 }
                 else{
                     sums[rows[i].employee_id] = rows[i].purchase_amount *1;
-
                     employees[rows[i].employee_id] = rows[i].first_name +" "+ rows[i].last_name;
                 }
-                
             }
 
             // Creates Excel workbook
             const workbook = new excel.Workbook();
             const worksheet =workbook.addWorksheet("Sheet 1");
-            // Adds data to workbook
+            // Adds column headers to the worksheet
             worksheet.cell(1,1).string('EEID');
             worksheet.cell(1,2).string('Name');
             worksheet.cell(1,3).string('Total');
-
+            // Adds data to the worksheet
             let counter = 2;
             for( let key in sums){
                 worksheet.cell(counter,1).number(key*1);
@@ -79,6 +72,7 @@ app.get('/getReport', (req, res) => {
                 else{
                     console.log('Excel file generated successfully!');
                     console.log(__dirname+'\\'+fileName);
+                    // Sends the file to the frontend
                     res.download(__dirname+'\\'+fileName, fileName, function(err){
                         if(err){
                             next(err);
@@ -87,19 +81,13 @@ app.get('/getReport', (req, res) => {
                             console.log("File Sent:" , fileName);
                         }
                     })
-
                 }
             });
-
-            //create file
        } 
        else{
         console.log(err);
        }
     })
-
-
-
 });
 
 // Deletes selected purchase
@@ -124,7 +112,7 @@ app.post('/addEmployee', (req,res) => {
     var sql = "SET @Eeid = ?;SET @FirstName = ?;SET @LastName = ?; \
     CALL AddEmployee(@Eeid,@FirstName,@LastName);";
     
-    db.query(sql, [emp.Eeid, emp.FirstName, emp.LastName], (err, rows, fields) => {
+    db.query(sql, [emp.Eeid, emp.FirstName, emp.LastName], (err, rows) => {
         if(!err)
             res.status(201).send({msg: 'Created User', rows});
         else
@@ -132,6 +120,7 @@ app.post('/addEmployee', (req,res) => {
     })
 });
 
+// Adds purchase to the database
 app.post('/addPurchase', (req,res) => {
     let purchase = req.body;
     var sql = "SET @Eeid = ?;SET @DayPurchase = ?;SET @PurchaseAmount = ?; \
