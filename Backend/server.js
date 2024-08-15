@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const db = require('./database');
 const mysql = require('mysql2');
+const excel = require('excel4node');
 const app = express();
 const bodyparser = require('body-parser');
 const port = 3001;
@@ -27,9 +28,78 @@ app.get('/getEmpAndTransactions', (req, res) => {
 
 // Gets the report from the selected dates
 app.get('/getReport', (req, res) => {
-    let dates = req.dates;
+    let dates = req.query;
     console.log(dates);
-    // var sql = 'SELECT * FROM purchase ';
+    var sql = 'SELECT purchase.employee_id, purchase.day_of_purchase, purchase.purchase_amount, employee.first_name, employee.last_name \
+    FROM purchase, employee\
+    WHERE (purchase.employee_id = employee.employee_id)\
+    AND (Date(purchase.day_of_purchase) BETWEEN "'+ dates.dateFrom +'" AND "'+ dates.dateTo +'" );'
+    db.query(sql, (err,rows) => {
+       if(!err){
+
+            console.log(rows);
+            let sums = {};
+            let employees = {};
+            console.log(rows[0].employee_id);
+            for(let i = 0; i<rows.length; i++){
+                console.log("for loop")
+                if(rows[i].employee_id in sums){
+                    sums[rows[i].employee_id] += rows[i].purchase_amount *1;
+                    console.log(sums);
+                }
+                else{
+                    sums[rows[i].employee_id] = rows[i].purchase_amount *1;
+
+                    employees[rows[i].employee_id] = rows[i].first_name +" "+ rows[i].last_name;
+                }
+                
+            }
+
+            // Creates Excel workbook
+            const workbook = new excel.Workbook();
+            const worksheet =workbook.addWorksheet("Sheet 1");
+            // Adds data to workbook
+            worksheet.cell(1,1).string('EEID');
+            worksheet.cell(1,2).string('Name');
+            worksheet.cell(1,3).string('Total');
+
+            let counter = 2;
+            for( let key in sums){
+                worksheet.cell(counter,1).number(key*1);
+                worksheet.cell(counter,2).string(employees[key]);
+                worksheet.cell(counter,3).number(sums[key]);
+                counter++;
+            }
+            let fileName = "Reportfor"+dates.dateFrom+"-" + dates.dateTo+".xlsx";
+            //Saves Excel file
+            workbook.write(fileName,(err, stats) => {
+                if(err){
+                    console.log(err);
+                }
+                else{
+                    console.log('Excel file generated successfully!');
+                    console.log(__dirname+'\\'+fileName);
+                    res.download(__dirname+'\\'+fileName, fileName, function(err){
+                        if(err){
+                            next(err);
+                        }
+                        else{
+                            console.log("File Sent:" , fileName);
+                        }
+                    })
+
+                }
+            });
+
+            //create file
+       } 
+       else{
+        console.log(err);
+       }
+    })
+
+
+
 });
 
 // Deletes selected purchase
