@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef } from 'react'
 import axios from 'axios';
 
 
@@ -15,8 +15,8 @@ function AddUserPage() {
     const form = e.target;
     const formData = new FormData(form);
     const eeid = Number(formData.get('Eeid'));
-    const firstname = formData.get('FirstName');
-    const lastname = formData.get('LastName');
+    const firstname = formData.get('FirstName').trim();
+    const lastname = formData.get('LastName').trim();
     if(eeid == "" || firstname == "" || lastname == ""){
       alert("Please make sure all information is filled out.")
     }

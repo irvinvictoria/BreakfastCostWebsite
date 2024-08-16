@@ -56,7 +56,6 @@ function TransactionPage() {
             alert("Transaction was not deleted!")
         });
     }
-   
 
     function addPurchase(){
         // Gets todays date
@@ -78,7 +77,6 @@ function TransactionPage() {
                 getNameAndEntries();
             })
         }
-
     }
 
   return (
@@ -136,9 +134,7 @@ function TransactionPage() {
                     </tbody>
                 </table>
             </div>
-            
         </div>
-        
     </div>
   );
 }

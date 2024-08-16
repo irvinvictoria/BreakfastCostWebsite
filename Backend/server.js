@@ -111,7 +111,6 @@ app.post('/addEmployee', (req,res) => {
     let emp = req.body;
     var sql = "SET @Eeid = ?;SET @FirstName = ?;SET @LastName = ?; \
     CALL AddEmployee(@Eeid,@FirstName,@LastName);";
-    
     db.query(sql, [emp.Eeid, emp.FirstName, emp.LastName], (err, rows) => {
         if(!err)
             res.status(201).send({msg: 'Created User', rows});

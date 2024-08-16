@@ -5,6 +5,7 @@ function ReportsPage() {
   const inputDateFrom = useRef();
   const inputDateTo = useRef();
 
+  // Calls the backend to download the report
   function getReport() {
     const dateFrom = inputDateFrom.current.value;
     const dateTo = inputDateTo.current.value;
