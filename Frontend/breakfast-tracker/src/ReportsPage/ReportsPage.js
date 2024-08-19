@@ -9,7 +9,6 @@ function ReportsPage() {
   function getReport() {
     const dateFrom = inputDateFrom.current.value;
     const dateTo = inputDateTo.current.value;
-    console.log(dateFrom + dateTo)
     if(dateFrom == "" || dateTo == ""){
       alert("Please select desired dates.");
     }
@@ -20,7 +19,7 @@ function ReportsPage() {
         const url = window.URL.createObjectURL(new Blob([res.data]));
         const link = document.createElement('a');
         link.href = url;
-        link.setAttribute('download', 'Report'+dateFrom+'to'+dateTo+'.xlsx');
+        link.setAttribute('download', 'Report'+dateFrom+'TO'+dateTo+'.xlsx');
         document.body.appendChild(link);
         link.click();
         link.remove();

@@ -60,10 +60,12 @@ app.get('/getReport', (req, res) => {
             for( let key in sums){
                 worksheet.cell(counter,1).number(key*1);
                 worksheet.cell(counter,2).string(employees[key]);
-                worksheet.cell(counter,3).number(sums[key]);
+                worksheet.cell(counter,3).number(sums[key]).style({numberFormat: '#,##0.00'});
                 counter++;
             }
-            let fileName = "Reportfor"+dates.dateFrom+"-" + dates.dateTo+".xlsx";
+            
+            let fileName = "Report.xlsx";
+
             //Saves Excel file
             workbook.write(fileName,(err, stats) => {
                 if(err){

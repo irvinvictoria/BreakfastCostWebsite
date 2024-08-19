@@ -66,8 +66,8 @@ function TransactionPage() {
         // Gets the eeid 
         var eeid = inputEeid.current.value;
         var amount = inputAmount.current.value;
-        if(eeid == "" || today == "" || amount == ""){
-            alert("Please make sure all information is filled out.")
+        if(eeid == "" || today == "" || amount == "" || (amount*1 == 0)){
+            alert("Please make sure all information is filled out and purchase amount is not 0.")
         }
         else{
             const purchase = {'Eeid':eeid, 'DayPurchase':today,'PurchaseAmount':amount};
@@ -87,7 +87,7 @@ function TransactionPage() {
                 1. Choose Employee/Elige Empleado
             </h2>
             <div id='findEeid'>
-                <input ref={inputEeid} id='eeid' type='number' pattern='[0-9]*' placeholder='EEID'></input>
+                <input ref={inputEeid} id='eeid' type='text' pattern='[0-9]*' placeholder='EEID' inputMode='numeric' min='0'></input>
                 <button onClick={getNameAndEntries} id='findEmployeeButton'>Find EEID</button>
             </div>
             <div id='date'>
@@ -96,7 +96,7 @@ function TransactionPage() {
             </div>
             <div id='amount'>
                 <h2>3. Enter Amount/Entre la cantidad</h2>
-                <input ref={inputAmount} id='moneySpent' type='number' pattern='[0-9,.]*' placeholder='XX.XX'>
+                <input ref={inputAmount} id='moneySpent' type='number' pattern='[0-9,.]*' placeholder='XX.XX' inputMode='decimal' min='0' step='.01'>
                 </input>
                 <button id='enterMoneyButton' onClick={addPurchase}>Enter Amount</button>
             </div>

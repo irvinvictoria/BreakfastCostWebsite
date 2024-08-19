@@ -40,7 +40,7 @@ function AddUserPage() {
     <div className='addUserArea'>
         <h1>Add User</h1>
         <form onSubmit={addUser}>
-            <input name='Eeid' id='Eeid' type='number' ref={inputEeid} pattern='[0-9]*' placeholder='EEID'></input>
+            <input name='Eeid' id='Eeid' type='number' ref={inputEeid} pattern='[0-9]*' placeholder='EEID' inputMode='numeric' min='0'></input>
             <input name='FirstName' id='FirstName' ref={inputFirst} type='text' placeholder='First Name'></input>
             <input name='LastName' id='LastName' ref={inputLast} type='text' placeholder='Last Name'></input>
             <button id='addEmployeeButton'>Add User</button>
