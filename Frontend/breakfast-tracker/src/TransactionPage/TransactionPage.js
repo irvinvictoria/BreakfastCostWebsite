@@ -91,11 +91,11 @@ function TransactionPage() {
                 <button onClick={getNameAndEntries} id='findEmployeeButton'>Find EEID</button>
             </div>
             <div id='date'>
-                <h2>2. Select Date/Seleccione Fecha</h2>
+                <h2>2. Today's Date/Fecha de Hoy</h2>
                 <input ref={inputManualDate}  id='date' type='date'></input>
             </div>
             <div id='amount'>
-                <h2>3. Enter Amount/Entre la cantidad</h2>
+                <h2>3. Enter Amount/Ingresa la Cantidad</h2>
                 <input ref={inputAmount} id='moneySpent' type='number' pattern='[0-9,.]*' placeholder='XX.XX' inputMode='decimal' min='0' step='.01'>
                 </input>
                 <button id='enterMoneyButton' onClick={addPurchase}>Enter Amount</button>
