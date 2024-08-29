@@ -16,7 +16,6 @@ app.get('/getEmpAndTransactions', (req, res) => {
     var sql = 'SELECT * FROM purchase WHERE purchase.employee_id = ' + emp.Eeid + ' AND purchase.day_of_purchase = "'+ emp.day_of_purchase +'";' + 'SELECT * FROM employee WHERE employee_id = ' + emp.Eeid +';';
     db.query(sql, (err, rows, fields) => {
         if(!err){
-            console.log(rows[0]);
             res.status(200).send(rows);
         }
         else{
@@ -28,10 +27,9 @@ app.get('/getEmpAndTransactions', (req, res) => {
 // Gets the report from the selected dates
 app.get('/getReport', (req, res) => {
     let dates = req.query;
-    console.log(dates);
     var sql = 'SELECT purchase.employee_id, purchase.day_of_purchase, purchase.purchase_amount, employee.first_name, employee.last_name \
     FROM purchase, employee\
-    WHERE (purchase.employee_id = employee.employee_id)\
+    WHERE (purchase.employee_id = employee.employee_id) AND employee.company = "'+dates.company+'"\
     AND (Date(purchase.day_of_purchase) BETWEEN "'+ dates.dateFrom +'" AND "'+ dates.dateTo +'" );'
     db.query(sql, (err,rows) => {
        if(!err){
@@ -63,7 +61,7 @@ app.get('/getReport', (req, res) => {
                 worksheet.cell(counter,3).number(sums[key]).style({numberFormat: '#,##0.00'});
                 counter++;
             }
-            
+
             let fileName = "Report.xlsx";
 
             //Saves Excel file
@@ -95,7 +93,6 @@ app.get('/getReport', (req, res) => {
 // Deletes selected purchase
 app.delete('/deletePurchase/:id', (req, res) => {
     const purchaseId = req.params.id * 1;
-    console.log(purchaseId);
     var sql ='DELETE FROM purchase WHERE purchase_id ='+ purchaseId +';';
     db.query(sql, (err,rows) => {
         if(!err){
@@ -108,12 +105,29 @@ app.delete('/deletePurchase/:id', (req, res) => {
     })
 });
 
+app.delete('/deleteEmployee/:id', (req, res) => {
+    const employeeId = req.params.id * 1;
+    var sql = 'DELETE FROM employee WHERE employee_id = '+ employeeId +';'; 
+    db.query(sql, (err,rows) => {
+        if(err){
+            console.log(rows);
+            res.status(404).send("Error in deleting employee");
+        }
+        else if(rows['affectedRows'] == 0){
+            res.status(404).send("Employee was not found");
+        }
+        else{
+            res.status(204).send({msg: 'Employee deleted'});
+        }
+    })
+})
+
 // Inserts an employee
 app.post('/addEmployee', (req,res) => {
     let emp = req.body;
-    var sql = "SET @Eeid = ?;SET @FirstName = ?;SET @LastName = ?; \
-    CALL AddEmployee(@Eeid,@FirstName,@LastName);";
-    db.query(sql, [emp.Eeid, emp.FirstName, emp.LastName], (err, rows) => {
+    var sql = "SET @Eeid = ?;SET @FirstName = ?;SET @LastName = ?;SET @Company = ?; \
+    CALL AddEmployee(@Eeid,@FirstName,@LastName,@Company);";
+    db.query(sql, [emp.Eeid, emp.FirstName, emp.LastName, emp.Company], (err, rows) => {
         if(!err)
             res.status(201).send({msg: 'Created User', rows});
         else

@@ -19,13 +19,15 @@ body {
 div.menu {
   width: 100%;
   background-color: #4d5791;
-  height: 60px;
-  padding: 0px;
+  height: auto;
+  padding: 3px;
+  display: inline-flex;
+  vertical-align: middle;
 }
 
 div.menu div{
-  margin-top: 12px;
-  display: inline-block;
+  margin-top: 0px;
+  display:inline-flex;
   max-height: 80px;
   max-width: 120px;
   margin-left: 8px;
@@ -35,6 +37,9 @@ div.menu div{
 }
 img{
   max-width: 100%;
+  min-width: 20px;
+  max-height: 40px;
+  padding:5px;
 }
 
 div.menu nav {
@@ -43,6 +48,7 @@ div.menu nav {
   list-style: none;
   display: inline-block;
   vertical-align: middle;
+  
 }
 
 div.menu a {
@@ -58,7 +64,8 @@ div.menu a {
   margin-left: 5px;
   margin-right: 5px;
   margin-top: 0;
-  margin-bottom: 35px;
+  margin-bottom: 5px;
+  text-decoration: underline;
   /* width: fit-content; */
 }
 

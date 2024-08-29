@@ -38,6 +38,9 @@ function TransactionPage() {
             setPdata(transactions);
             let fullName = employee.first_name + " " +employee.last_name;
             textName.current.value = "Name: " + fullName;
+            document.getElementById('moneySpent').focus();
+            document.getElementById('moneySpent').scrollIntoView();
+
         }).catch(err => {
             console.log(err);
             textName.current.value = "";
@@ -74,7 +77,9 @@ function TransactionPage() {
             axios.post('http://192.168.1.25:3001/AddPurchase', purchase)
             .then(res => {
                 alert('Purchase was added successfully');
+                inputAmount.current.value='';
                 getNameAndEntries();
+
             })
         }
     }
@@ -89,6 +94,7 @@ function TransactionPage() {
             <div id='findEeid'>
                 <input ref={inputEeid} id='eeid' type='text' pattern='[0-9]*' placeholder='EEID' inputMode='numeric' min='0'></input>
                 <button onClick={getNameAndEntries} id='findEmployeeButton'>Find EEID</button>
+                <input className='innerName' id='transactionsName' readOnly='readonly' ref={textName}></input>
             </div>
             <div id='date'>
                 <h2>2. Today's Date/Fecha de Hoy</h2>
@@ -107,16 +113,15 @@ function TransactionPage() {
                 Todays Transactions/Edit Entries
             </h2>
             <div className='employeeName'>
-                <h3 className='innerName' ref={textBoxName} value = {textBoxName}> </h3>
-                <input className='innerName' id='transactionsName' readOnly='readonly' ref={textName}></input>
+                {/* <input className='innerName' id='transactionsName' readOnly='readonly' ref={textName}></input> */}
             </div>
             <div className='todaysTransactions'>
                 <table className='purchaseTable'>
                     <thead>
                         <tr>
-                            <th>Day of purchase</th>
-                            <th>Purchase amount</th>
-                            <th>Action</th>
+                            <th>Day of purchase/ Dia</th>
+                            <th>Purchase amount/ Cantidad</th>
+                            <th>Delete/ Borrar</th>
                         </tr>
                     </thead>
                     <tbody>
