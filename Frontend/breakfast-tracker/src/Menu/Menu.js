@@ -14,7 +14,7 @@ function Menu() {
         <nav>
             <Link to="/" itemProp='url'>Transactions</Link>
             <Link to="/ReportsPage" itemProp='url'>Reports</Link>
-            <Link to="/AddUserPage" itemProp='url'>Employee</Link>
+            <Link to="/AddUserPage" itemProp='url'>Employees</Link>
         </nav>
     </div>
   );

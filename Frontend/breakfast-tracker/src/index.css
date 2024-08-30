@@ -160,13 +160,12 @@ div.addUserArea button{
 .innerName {
   text-align: center;
   font-weight: bolder;
+  width:fit-content;
 }
 .employeeName {
   flex: 1;
   vertical-align: center;
   margin: 10px;
-
-  
 }
 .purchaseTable {
   display: inline;

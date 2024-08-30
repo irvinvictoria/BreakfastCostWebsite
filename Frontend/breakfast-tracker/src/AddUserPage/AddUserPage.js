@@ -13,7 +13,6 @@ function AddUserPage() {
 
   // Adds a new employee to the database
   function addUser(e) {
-    
     e.preventDefault();
     const form = e.target;
     const formData = new FormData(form);
@@ -42,6 +41,7 @@ function AddUserPage() {
     }
   }
 
+  //Deletes an employee from the database along with their purchases
   function deleteUser(e){
     e.preventDefault();
     const form = e.target;
@@ -67,7 +67,7 @@ function AddUserPage() {
 
   return (
     <div className='addUserArea'>
-        <h1>Add User</h1>
+        <h1>Add Employee</h1>
         <form onSubmit={addUser}>
             <input name='Eeid' id='Eeid' type='number' ref={inputEeid} pattern='[0-9]*' placeholder='EEID' inputMode='numeric' min='0'></input>
             <input name='FirstName' id='FirstName' ref={inputFirst} type='text' placeholder='First Name'></input>
@@ -76,7 +76,7 @@ function AddUserPage() {
             <button id='addEmployeeButton'>Add Employee</button>
         </form>
 
-        <h1>Delete User</h1>
+        <h1>Delete Employee</h1>
         <form onSubmit={deleteUser}>
             <input name='DeleteEeid' id='DeleteEeid' ref={deleteEeid} type='number' pattern='[0-9]*' inputMode='numeric' min='1' placeholder='EEID to Delete'></input>
             <button id='deleteEmployeeButton'>Delete Employee</button>

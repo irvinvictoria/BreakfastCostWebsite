@@ -37,7 +37,7 @@ function TransactionPage() {
             let transactions = res.data[0];
             setPdata(transactions);
             let fullName = employee.first_name + " " +employee.last_name;
-            textName.current.value = "Name: " + fullName;
+            textName.current.value = fullName;
             document.getElementById('moneySpent').focus();
             document.getElementById('moneySpent').scrollIntoView();
 
@@ -76,10 +76,9 @@ function TransactionPage() {
             const purchase = {'Eeid':eeid, 'DayPurchase':today,'PurchaseAmount':amount};
             axios.post('http://192.168.1.25:3001/AddPurchase', purchase)
             .then(res => {
-                alert('Purchase was added successfully');
+                alert('Purchase was added successfully / La compra fue agregada');
                 inputAmount.current.value='';
                 getNameAndEntries();
-
             })
         }
     }
@@ -94,7 +93,7 @@ function TransactionPage() {
             <div id='findEeid'>
                 <input ref={inputEeid} id='eeid' type='text' pattern='[0-9]*' placeholder='EEID' inputMode='numeric' min='0'></input>
                 <button onClick={getNameAndEntries} id='findEmployeeButton'>Find EEID</button>
-                <input className='innerName' id='transactionsName' readOnly='readonly' ref={textName}></input>
+                <input className='innerName' id='transactionsName' readOnly='readonly' ref={textName} placeholder='Name/Nombre'></input>
             </div>
             <div id='date'>
                 <h2>2. Today's Date/Fecha de Hoy</h2>
@@ -110,7 +109,7 @@ function TransactionPage() {
 
         <div className='editEntries'>
             <h2>
-                Todays Transactions/Edit Entries
+                Todays Transactions /Compras de hoy
             </h2>
             <div className='employeeName'>
                 {/* <input className='innerName' id='transactionsName' readOnly='readonly' ref={textName}></input> */}
@@ -131,7 +130,7 @@ function TransactionPage() {
                                    <td>{purchase.day_of_purchase.substr(0,10)}</td>
                                    <td>{purchase.purchase_amount}</td>
                                    <td>
-                                        <button id='tableButton' onClick={() => deletePurchase(purchase.purchase_id)}>Delete</button>
+                                        <button id='tableButton' onClick={() => deletePurchase(purchase.purchase_id)}>Delete/Borrar</button>
                                    </td>
                                 </tr>
                             ))
