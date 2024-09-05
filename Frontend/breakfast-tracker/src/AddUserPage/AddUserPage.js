@@ -36,7 +36,8 @@ function AddUserPage() {
         inputCompany.current.value = '';
       }).catch(err => {
         console.log(err)
-        alert("User was not added, check with admin.");
+        var errMsg = err['request']['response'];
+        alert(errMsg);
       });
     }
   }

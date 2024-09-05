@@ -134,10 +134,15 @@ div.reportMainArea{
   /* text-align: center; */
 }
 
-#createReportButton{
+.reportButtons{
   font-weight: bolder;
+  display: inline-block;
   margin: 10px 0px;
-  padding: 4px;
+  padding: 2px;
+  width: 65%;
+}
+.selectDatesArea{
+  display: inline-block;
 }
 
 div.addUserArea{

@@ -90,6 +90,79 @@ app.get('/getReport', (req, res) => {
     })
 });
 
+// Gets the backup report from the selected dates
+app.get('/getBackupReport', (req, res) => {
+    let dates = req.query;
+    var sql = 'SELECT purchase.employee_id, purchase.day_of_purchase, purchase.purchase_amount, employee.first_name, employee.last_name \
+    FROM purchase, employee\
+    WHERE (purchase.employee_id = employee.employee_id) AND employee.company = "'+dates.company+'"\
+    AND (Date(purchase.day_of_purchase) BETWEEN "'+ dates.dateFrom +'" AND "'+ dates.dateTo +'") \
+    ORDER BY purchase.employee_id, purchase.day_of_purchase ASC;';
+    db.query(sql, (err,rows) => {
+       if(!err){
+             // Creates Excel workbook
+            const workbook = new excel.Workbook();
+            const worksheet = workbook.addWorksheet("Sheet 1");
+
+            let sums = {};
+            let employees = {};
+            let offset = 1;
+            // Adds amount spent each day by every employee and puts their total spent for time period at the end of their section.
+            for(let i = 0; i<rows.length; i++){
+                if(rows[i].employee_id in sums){
+                    sums[rows[i].employee_id] += rows[i].purchase_amount *1;
+                    console.log(sums);
+                    worksheet.cell(i+offset,3).date(rows[i].day_of_purchase);
+                    worksheet.cell(i+offset,4).number(rows[i].purchase_amount * 1).style({numberFormat:'#,##0.00'});
+                    if(i == rows.length-1 || rows[i+1].employee_id != rows[i].employee_id){
+                        offset++;
+                        worksheet.cell(i+offset,3).string('Total:');
+                        worksheet.cell(i+offset,4).number(sums[rows[i].employee_id]).style({numberFormat: '#,##0.00', font: {bold: true, color:'ff0000'}} );
+                    }
+                }
+                else{
+                    sums[rows[i].employee_id] = rows[i].purchase_amount *1;
+                    employees[rows[i].employee_id] = rows[i].first_name +" "+ rows[i].last_name;
+                    worksheet.cell(i+offset,1).number(rows[i].employee_id * 1);
+                    worksheet.cell(i+offset,2).string(rows[i].first_name +" "+ rows[i].last_name);
+                    worksheet.cell(i+offset,3).date(rows[i].day_of_purchase);
+                    worksheet.cell(i+offset,4).number(rows[i].purchase_amount * 1).style({numberFormat:'#,##0.00'});
+                    if(i == rows.length-1 || rows[i+1].employee_id != rows[i].employee_id){
+                        offset++;
+                        worksheet.cell(i+offset,3).string('Total:');
+                        worksheet.cell(i+offset,4).number(sums[rows[i].employee_id]).style({numberFormat: '#,##0.00', font: {bold: true, color:'ff0000'}});
+                    }
+                }
+            }
+
+            let fileName = "Report.xlsx";
+
+            //Saves Excel file
+            workbook.write(fileName,(err, stats) => {
+                if(err){
+                    console.log(err);
+                }
+                else{
+                    console.log('Excel file generated successfully!');
+                    console.log(__dirname+'\\'+fileName);
+                    // Sends the file to the frontend
+                    res.download(__dirname+'\\'+fileName, fileName, function(err){
+                        if(err){
+                            next(err);
+                        }
+                        else{
+                            console.log("File Sent:" , fileName);
+                        }
+                    })
+                }
+            });
+       } 
+       else{
+        console.log(err);
+       }
+    })
+});
+
 // Deletes selected purchase
 app.delete('/deletePurchase/:id', (req, res) => {
     const purchaseId = req.params.id * 1;
@@ -128,9 +201,12 @@ app.post('/addEmployee', (req,res) => {
     var sql = "SET @Eeid = ?;SET @FirstName = ?;SET @LastName = ?;SET @Company = ?; \
     CALL AddEmployee(@Eeid,@FirstName,@LastName,@Company);";
     db.query(sql, [emp.Eeid, emp.FirstName, emp.LastName, emp.Company], (err, rows) => {
-        if(!err)
+        if(!err){
+            // console.log(rows);
             res.status(201).send({msg: 'Created User', rows});
+        }
         else
+            res.status(400).send("Employee already exists");
             console.log(err);
     })
 });
