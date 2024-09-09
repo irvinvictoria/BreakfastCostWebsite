@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/static/css/main.49a07cde.css",
+    "main.js": "/static/js/main.803ba384.js",
+    "static/js/453.30e2d4ac.chunk.js": "/static/js/453.30e2d4ac.chunk.js",
+    "static/media/MetrolinaLogo.jpg": "/static/media/MetrolinaLogo.2400f804a9db4253a719.jpg",
+    "index.html": "/index.html",
+    "main.49a07cde.css.map": "/static/css/main.49a07cde.css.map",
+    "main.803ba384.js.map": "/static/js/main.803ba384.js.map",
+    "453.30e2d4ac.chunk.js.map": "/static/js/453.30e2d4ac.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.49a07cde.css",
+    "static/js/main.803ba384.js"
+  ]
+}

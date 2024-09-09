@@ -39,12 +39,11 @@ function TransactionPage() {
             let fullName = employee.first_name + " " +employee.last_name;
             textName.current.value = fullName;
             document.getElementById('moneySpent').focus();
-            document.getElementById('moneySpent').scrollIntoView();
 
         }).catch(err => {
             console.log(err);
             textName.current.value = "";
-            alert("Cannot find user");
+            alert("Cannot find employee/Empleado no esta en el sistema");
         });
     }
 
