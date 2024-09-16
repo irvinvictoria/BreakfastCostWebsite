@@ -66,6 +66,25 @@ function AddUserPage() {
     }
   }
 
+  // Gets/Downloads the employee list from the database
+  function getEmployees(e){
+    e.preventDefault();
+    axios.get('http://192.168.1.25:3001/getEmployeeReport', {responseType:'blob'})
+      .then(res => {
+        const url = window.URL.createObjectURL(new Blob([res.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'Employees.xlsx');
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+      })
+      .catch(err =>{
+        console.log(err);
+        alert("Could not create report")
+      })
+  }
+
   return (
     <div className='addUserArea'>
         <h1>Add Employee</h1>
@@ -81,6 +100,10 @@ function AddUserPage() {
         <form onSubmit={deleteUser}>
             <input name='DeleteEeid' id='DeleteEeid' ref={deleteEeid} type='number' pattern='[0-9]*' inputMode='numeric' min='1' placeholder='EEID to Delete'></input>
             <button id='deleteEmployeeButton'>Delete Employee</button>
+        </form>
+
+        <form onSubmit={getEmployees}>
+            <button id='getEmployees'>Get Employee List</button>
         </form>
     </div>
   );

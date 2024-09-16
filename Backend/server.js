@@ -163,6 +163,55 @@ app.get('/getBackupReport', (req, res) => {
     })
 });
 
+app.get('/getEmployeeReport', (req,res) =>{
+    var sql = 'SELECT * FROM employee';
+    db.query(sql, (err,rows) => {
+       if(!err){
+            // Creates Excel workbook
+            const workbook = new excel.Workbook();
+            const worksheet = workbook.addWorksheet("Employees");
+            // Adds column headers to the worksheet
+            worksheet.cell(1,1).string('EEID');
+            worksheet.cell(1,2).string('First Name');
+            worksheet.cell(1,3).string('Last Name');
+            worksheet.cell(1,4).string('Company');
+
+            // Adds employees to excel worksheet
+            for(let i = 0; i<rows.length; i++){
+                worksheet.cell(i+2,1).number(rows[i].employee_id *1);
+                worksheet.cell(i+2,2).string(rows[i].first_name);
+                worksheet.cell(i+2,3).string(rows[i].last_name);
+                worksheet.cell(i+2,4).string(rows[i].company);
+            }
+
+            let fileName = "Report.xlsx";
+
+            //Saves Excel file
+            workbook.write(fileName,(err, stats) => {
+                if(err){
+                    console.log(err);
+                }
+                else{
+                    console.log('Excel file generated successfully!');
+                    console.log(__dirname+'\\'+fileName);
+                    // Sends the file to the frontend
+                    res.download(__dirname+'\\'+fileName, fileName, function(err){
+                        if(err){
+                            next(err);
+                        }
+                        else{
+                            console.log("File Sent:" , fileName);
+                        }
+                    })
+                }
+            });
+       }
+       else{
+            console.log(err);
+       } 
+    });
+});
+
 // Deletes selected purchase
 app.delete('/deletePurchase/:id', (req, res) => {
     const purchaseId = req.params.id * 1;
